@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Equipamentos Disponíveis - Sistema de Empréstimos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📋 Todos os Equipamentos</h2>
+    <div>
+        <a href="{% url 'home' %}" class="btn btn-outline-primary">← Voltar para Início</a>
+        <a href="/admin" class="btn btn-outline-secondary">🔧 Admin</a>
+    </div>
+</div>
+
+<!-- Adicione estatísticas rápidas -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ equipamentos.count }}</h5>
+                <p class="card-text">Total de Equipamentos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ equipamentos_disponiveis_count }}</h5>
+                <p class="card-text">Disponíveis</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ categorias_count }}</h5>
+                <p class="card-text">Categorias</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for equipamento in equipamentos %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ equipamento.nome }}</h5>
+                <p class="card-text">
+                    <strong>📁 Categoria:</strong> {{ equipamento.categoria }}<br>
+                    <strong>🔢 Nº Série:</strong> <code>{{ equipamento.numero_serie }}</code><br>
+                    <strong>📝 Descrição:</strong> 
+                    {% if equipamento.descricao %}
+                        {{ equipamento.descricao|truncatewords:15 }}
+                    {% else %}
+                        <em class="text-muted">Sem descrição</em>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="card-footer bg-transparent">
+                {% if equipamento.disponivel %}
+                <span class="badge bg-success p-2">✅ Disponível para Empréstimo</span>
+                {% else %}
+                <span class="badge bg-danger p-2">❌ Indisponível</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <h4>📭 Nenhum equipamento cadastrado</h4>
+            <p>Vá para o <a href="/admin" class="alert-link">painel administrativo</a> para adicionar equipamentos.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

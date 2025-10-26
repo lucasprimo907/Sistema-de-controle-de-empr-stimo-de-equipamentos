@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Meus Empréstimos - Sistema de Empréstimos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📋 Meus Empréstimos</h2>
+    <div>
+        <a href="{% url 'solicitar_emprestimo' %}" class="btn btn-primary">➕ Solicitar Empréstimo</a>
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">← Voltar</a>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    {% for emprestimo in meus_emprestimos %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ emprestimo.equipamento.nome }}</h5>
+                <p class="card-text">
+                    <strong>📁 Categoria:</strong> {{ emprestimo.equipamento.categoria }}<br>
+                    <strong>🔢 Nº Série:</strong> <code>{{ emprestimo.equipamento.numero_serie }}</code><br>
+                    <strong>📅 Data Solicitação:</strong> {{ emprestimo.data_solicitacao|date:"d/m/Y H:i" }}<br>
+                    <strong>📅 Devolução Prevista:</strong> {{ emprestimo.data_devolucao_prevista|date:"d/m/Y" }}<br>
+                    {% if emprestimo.observacoes %}
+                    <strong>📝 Observações:</strong> {{ emprestimo.observacoes }}<br>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="card-footer">
+                {% if emprestimo.status == 'pendente' %}
+                <span class="badge bg-warning text-dark">⏳ Pendente</span>
+                {% elif emprestimo.status == 'aprovado' %}
+                <span class="badge bg-success">✅ Aprovado</span>
+                {% elif emprestimo.status == 'negado' %}
+                <span class="badge bg-danger">❌ Negado</span>
+                {% elif emprestimo.status == 'ativo' %}
+                <span class="badge bg-primary">📦 Ativo</span>
+                {% elif emprestimo.status == 'finalizado' %}
+                <span class="badge bg-secondary">🏁 Finalizado</span>
+                {% elif emprestimo.status == 'atrasado' %}
+                <span class="badge bg-danger">⚠️ Atrasado</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <h4>📭 Nenhum empréstimo encontrado</h4>
+            <p>Você ainda não possui solicitações de empréstimo.</p>
+            <a href="{% url 'solicitar_emprestimo' %}" class="btn btn-primary">Fazer Primeira Solicitação</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

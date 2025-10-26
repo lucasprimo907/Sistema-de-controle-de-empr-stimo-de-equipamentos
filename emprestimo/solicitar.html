@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Solicitar Empréstimo - Sistema de Empréstimos{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📦 Solicitar Empréstimo</h2>
+            <a href="{% url 'lista_emprestimos' %}" class="btn btn-outline-secondary">← Voltar</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="equipamento" class="form-label">Equipamento *</label>
+                        <select class="form-select" id="equipamento" name="equipamento" required>
+                            <option value="">Selecione um equipamento...</option>
+                            {% for equipamento in equipamentos_disponiveis %}
+                            <option value="{{ equipamento.id }}">
+                                {{ equipamento.nome }} - {{ equipamento.numero_serie }} ({{ equipamento.categoria }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Apenas equipamentos disponíveis são mostrados.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="data_devolucao" class="form-label">Data de Devolução Prevista *</label>
+                        <input type="date" class="form-control" id="data_devolucao" name="data_devolucao" 
+                               min="{{ hoje|date:'Y-m-d' }}" required>
+                        <div class="form-text">Selecione a data em que você pretende devolver o equipamento.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observacoes" class="form-label">Observações</label>
+                        <textarea class="form-control" id="observacoes" name="observacoes" 
+                                  rows="3" placeholder="Digite alguma observação sobre o empréstimo..."></textarea>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            📨 Enviar Solicitação
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

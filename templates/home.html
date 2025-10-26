@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Página Inicial - Sistema de Empréstimos{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-5">
+        <h1 class="display-4">🏢 Sistema de Controle de Empréstimos</h1>
+        <p class="lead">Controle completo de equipamentos e empréstimos</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h2>{{ total_equipamentos }}</h2>
+                <p class="card-text">Equipamentos Cadastrados</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h2>{{ equipamentos_disponiveis }}</h2>
+                <p class="card-text">Equipamentos Disponíveis</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <h2>{{ total_categorias }}</h2>
+                <p class="card-text">Categorias</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🔍 SEÇÃO DE BUSCA RÁPIDA -->
+<div class="row mt-5">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="card-title">🔍 Busca Avançada</h4>
+                <p class="card-text">Encontre equipamentos por nome, número de série, categoria ou descrição</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{% url 'buscar_equipamentos' %}" class="btn btn-primary btn-lg">
+                        🔍 Ir para Busca Avançada
+                    </a>
+                    <a href="{% url 'lista_equipamentos' %}" class="btn btn-outline-secondary btn-lg">
+                        📋 Ver Todos os Equipamentos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="d-grid gap-2">
+            {% if user.is_authenticated %}
+            <a href="/emprestimos/meus-emprestimos/" class="btn btn-outline-primary btn-lg">
+                📋 Ver Meus Empréstimos
+            </a>
+            {% else %}
+            <a href="{% url 'admin:login' %}" class="btn btn-outline-secondary btn-lg">
+                🔐 Área Administrativa
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
